@@ -18,7 +18,6 @@ end
 function Bullet:draw()
 	for k,v in ipairs(Asteroids) do
 		if DistanceBetweenPoints( self.position, v.position ) < self.radius + v.radius then
-			BULLETS = BULLETS + 2
 			POINTS = POINTS + 1
 			v.enable = false
 			self.enable = false

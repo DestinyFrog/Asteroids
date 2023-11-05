@@ -8,7 +8,9 @@ function Ship:new()
 
 	self.enable = true
 	self.sprite = love.graphics.newImage( "sprites/ship.png" )
-	self.position = MIDDLE
+	self.sprite_in_fire = love.graphics.newImage( "sprites/ship_in_fire.png" )
+	self.position = Vec2( MIDDLE.x, MIDDLE.y )
+	self.inMove = false
 	self.velocity = Vec2( 0, 0 )
 	self.angle = 0
 	self.speed = 1
@@ -28,8 +30,7 @@ function Ship:update()
 	end
 
 	if love.keyboard.isDown('space') then
-		if self.stopPressSpace == true and BULLETS > 0 then
-			BULLETS = BULLETS - 1
+		if self.stopPressSpace == true then
 
 			local front = self.angle - 90
 			local direction = Vec2(
@@ -47,15 +48,22 @@ function Ship:update()
 
 	self.velocity.x = 0
 	self.velocity.y = 0
+	self.inMove = false
 
 	if love.keyboard.isDown('w') then
+		self.inMove = true
 		local front = self.angle - 90
 		self.velocity.x = math.cos( ToRadians( front ) )
 		self.velocity.y = math.sin( ToRadians( front ) )
 	end
 
-	if love.keyboard.isDown('a') then self.angle = self.angle - self.rotateSpeed end
-	if love.keyboard.isDown('d') then self.angle = self.angle + self.rotateSpeed end
+	if love.keyboard.isDown('a') then
+		self.angle = self.angle - self.rotateSpeed
+	end
+
+	if love.keyboard.isDown('d') then
+		self.angle = self.angle + self.rotateSpeed
+	end
 
 	self.position.x = self.position.x + (self.velocity.x * self.speed)
 	self.position.y = self.position.y + (self.velocity.y * self.speed)
@@ -70,9 +78,17 @@ function Ship:draw()
 		end
 	end
 
-	love.graphics.draw( self.sprite,
+	if self.inMove == false then
+		love.graphics.draw( self.sprite,
+			self.position.x, self.position.y,
+			ToRadians(self.angle),
+			1.2, 1.2,
+			self.sprite:getWidth()/2, self.sprite:getHeight()/2 )
+	else
+		love.graphics.draw( self.sprite_in_fire,
 		self.position.x, self.position.y,
 		ToRadians(self.angle),
-		1, 1,
+		1.2, 1.2,
 		self.sprite:getWidth()/2, self.sprite:getHeight()/2 )
+	end
 end

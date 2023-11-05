@@ -8,7 +8,7 @@ function Asteroid:new()
 	obj.sprite = love.graphics.newImage( "sprites/asteroid_"..math.random( ASTEROIDS_SPRITES_RANGE )..".png" )
 	obj.speed = math.random( 1.0, 7.0 )/10
 	obj.radius = math.random( 5, 10 )
-	obj.size = ( 1 / 10 ) * obj.radius
+	obj.size = ( 1 / (obj.sprite:getWidth()/2) ) * obj.radius
 	obj.targetAngle = math.random( 360 )
 
 	local angle = math.random( 360 )
@@ -33,6 +33,10 @@ function Asteroid:draw()
 	if DistanceFromMiddle( self.position ) > ScreenDiagonal then
 		self.enable = false
 	end
+
+	-- love.graphics.setColor( 1, 0, 0 )
+	-- love.graphics.circle("line",self.position.x, self.position.y, self.radius)
+	-- love.graphics.setColor( 1, 1, 1 )
 
 	love.graphics.draw( self.sprite,
 		self.position.x-self.radius, self.position.y-self.radius,
